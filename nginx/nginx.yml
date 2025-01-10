@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    networks:
+      - ${TRAEFIK_NETWORK}
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.nginx.rule=Host(`nginx.${DOMAIN}`)"
+        - "traefik.http.routers.nginx.entrypoints=web"
+        - "traefik.http.services.nginx.loadbalancer.server.port=80"
+
+networks:
+  ${TRAEFIK_NETWORK}:
+    external: true
